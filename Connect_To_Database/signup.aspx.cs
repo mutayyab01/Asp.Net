@@ -33,10 +33,14 @@ namespace Connect_To_Database
             int a = cmd.ExecuteNonQuery();
             if (a>0)
             {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "scripts", "<script> alert('Registration Successfull');</script>");
+                Response.Redirect("~/login.aspx");
 
             }
+
             else
             {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "scripts", "<script> alert('Registration Failed');</script>");
 
             }
             con.Close();
