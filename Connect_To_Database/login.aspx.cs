@@ -78,7 +78,7 @@ namespace Connect_To_Database
             SqlCommand cmd2 = new SqlCommand(query2, con);
             cmd.Parameters.AddWithValue("@user", TextBox1.Text);
             cmd.Parameters.AddWithValue("@pass", TextBox2.Text);
-            cmd2.Parameters.AddWithValue("@email", TextBox2.Text);
+            cmd2.Parameters.AddWithValue("@email", TextBox1.Text);
             cmd2.Parameters.AddWithValue("@pass", TextBox2.Text);
             con.Open();
             SqlDataReader dr = cmd.ExecuteReader();
@@ -86,10 +86,10 @@ namespace Connect_To_Database
             {
                 dr.Read();
                 var dbusername = dr[5].ToString();
-                var dbemail = dr[6].ToString();
+
                 var dbPassword = dr[7].ToString();
                 dr.Close();
-                if (((dbusername == TextBox1.Text) || (dbemail == TextBox1.Text)) && (dbPassword == TextBox2.Text))
+                if ((dbusername == TextBox1.Text) && (dbPassword == TextBox2.Text))
                 {
 
                     con.Close();
@@ -105,76 +105,34 @@ namespace Connect_To_Database
             }
             else if (dr.HasRows == false)
             {
-                con2.Open();
+                con.Close();
+                con.Open();
                 SqlDataReader dr2 = cmd2.ExecuteReader();
                 if (dr2.HasRows == true)
                 {
                     dr2.Read();
-                    var dbemail = dr[6].ToString();
-                    var dbPassword = dr[7].ToString();
+                    var dbemail = dr2[6].ToString();
+                    var dbPassword = dr2[7].ToString();
                     dr2.Close();
                     if (dbemail == TextBox1.Text && dbPassword == TextBox2.Text)
                     {
-                        con2.Close();
+                        con.Close();
                         Response.Redirect("~/Dashboard.aspx");
                     }
                     else
                     {
                         Page.ClientScript.RegisterStartupScript(this.GetType(), "scripts", "<script> alert('Login Faild');</script>");
-                        con2.Close();
+                        con.Close();
                     }
 
                 }
                 else
                 {
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "scripts", "<script> alert('Login Faild');</script>");
-                    con2.Close();
+                    con.Close();
                 }
 
             }
-            
-            else
-            {
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "scripts", "<script> alert('Login Faild');</script>");
-                con.Close();
-
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
