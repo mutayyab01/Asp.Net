@@ -11,6 +11,13 @@ namespace Connect_To_Database
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["user"]!=null)
+            {
+                Response.Write(Session["user"].ToString());
+            }
+
+
+
 
         }
     }

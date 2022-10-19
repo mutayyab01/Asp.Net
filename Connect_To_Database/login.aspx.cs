@@ -70,70 +70,109 @@ namespace Connect_To_Database
             //con.Close(); 
             #endregion
 
+            #region 2nd_Approach
+            //SqlConnection con = new SqlConnection(cs);
+            //SqlConnection con2 = new SqlConnection(cs);
+            //string query = "select * from signup_tbl where username=@user and password=@pass";
+            //string query2 = "select * from signup_tbl where email=@email and password=@pass";
+            //SqlCommand cmd = new SqlCommand(query, con);
+            //SqlCommand cmd2 = new SqlCommand(query2, con);
+            //cmd.Parameters.AddWithValue("@user", TextBox1.Text);
+            //cmd.Parameters.AddWithValue("@pass", TextBox2.Text);
+            //cmd2.Parameters.AddWithValue("@email", TextBox1.Text);
+            //cmd2.Parameters.AddWithValue("@pass", TextBox2.Text);
+            //con.Open();
+            //SqlDataReader dr = cmd.ExecuteReader();
+            //if (dr.HasRows == true)
+            //{
+            //    dr.Read();
+            //    var dbusername = dr[5].ToString();
+
+            //    var dbPassword = dr[7].ToString();
+            //    dr.Close();
+            //    if ((dbusername == TextBox1.Text) && (dbPassword == TextBox2.Text))
+            //    {
+
+            //        con.Close();
+            //        Response.Redirect("~/Dashboard.aspx");
+
+            //    }
+            //    else
+            //    {
+            //        Page.ClientScript.RegisterStartupScript(this.GetType(), "scripts", "<script> alert('Login Faild');</script>");
+            //        con.Close();
+
+            //    }
+            //}
+            //else if (dr.HasRows == false)
+            //{
+            //    con.Close();
+            //    con.Open();
+            //    SqlDataReader dr2 = cmd2.ExecuteReader();
+            //    if (dr2.HasRows == true)
+            //    {
+            //        dr2.Read();
+            //        var dbemail = dr2[6].ToString();
+            //        var dbPassword = dr2[7].ToString();
+            //        dr2.Close();
+            //        if (dbemail == TextBox1.Text && dbPassword == TextBox2.Text)
+            //        {
+            //            con.Close();
+            //            Response.Redirect("~/Dashboard.aspx");
+            //        }
+            //        else
+            //        {
+            //            Page.ClientScript.RegisterStartupScript(this.GetType(), "scripts", "<script> alert('Login Faild');</script>");
+            //            con.Close();
+            //        }
+
+            //    }
+            //    else
+            //    {
+            //        Page.ClientScript.RegisterStartupScript(this.GetType(), "scripts", "<script> alert('Login Faild');</script>");
+            //        con.Close();
+            //    }
+
+            //} 
+            #endregion
+
             SqlConnection con = new SqlConnection(cs);
-            SqlConnection con2 = new SqlConnection(cs);
-            string query = "select * from signup_tbl where username=@user and password=@pass";
-            string query2 = "select * from signup_tbl where email=@email and password=@pass";
+            string query = "select * from signup_tbl where (username=@user and password=@pass) or (email=@email and password=@pass)";
             SqlCommand cmd = new SqlCommand(query, con);
-            SqlCommand cmd2 = new SqlCommand(query2, con);
             cmd.Parameters.AddWithValue("@user", TextBox1.Text);
             cmd.Parameters.AddWithValue("@pass", TextBox2.Text);
-            cmd2.Parameters.AddWithValue("@email", TextBox1.Text);
-            cmd2.Parameters.AddWithValue("@pass", TextBox2.Text);
+            cmd.Parameters.AddWithValue("@email", TextBox1.Text);
             con.Open();
             SqlDataReader dr = cmd.ExecuteReader();
             if (dr.HasRows == true)
             {
                 dr.Read();
                 var dbusername = dr[5].ToString();
-
-                var dbPassword = dr[7].ToString();
-                dr.Close();
-                if ((dbusername == TextBox1.Text) && (dbPassword == TextBox2.Text))
+                var dbemail = dr[6].ToString();
+                var dbpassword = dr[7].ToString();
+                if ((dbusername == TextBox1.Text && dbpassword == TextBox2.Text) || (dbemail == TextBox1.Text && dbpassword == TextBox2.Text))
                 {
-
+                    Session["user"] = dr[5].ToString();
                     con.Close();
                     Response.Redirect("~/Dashboard.aspx");
 
+
                 }
                 else
                 {
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "scripts", "<script> alert('Login Faild');</script>");
-                    con.Close();
 
                 }
             }
-            else if (dr.HasRows == false)
+            else
             {
-                con.Close();
-                con.Open();
-                SqlDataReader dr2 = cmd2.ExecuteReader();
-                if (dr2.HasRows == true)
-                {
-                    dr2.Read();
-                    var dbemail = dr2[6].ToString();
-                    var dbPassword = dr2[7].ToString();
-                    dr2.Close();
-                    if (dbemail == TextBox1.Text && dbPassword == TextBox2.Text)
-                    {
-                        con.Close();
-                        Response.Redirect("~/Dashboard.aspx");
-                    }
-                    else
-                    {
-                        Page.ClientScript.RegisterStartupScript(this.GetType(), "scripts", "<script> alert('Login Faild');</script>");
-                        con.Close();
-                    }
-
-                }
-                else
-                {
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "scripts", "<script> alert('Login Faild');</script>");
-                    con.Close();
-                }
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "scripts", "<script> alert('Login Faild');</script>");
 
             }
-            
+            con.Close();
+
+
+
         }
 
 
